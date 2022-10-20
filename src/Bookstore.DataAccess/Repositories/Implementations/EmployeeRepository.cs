@@ -57,5 +57,15 @@ namespace Bookstore.DataAccess.Repositories.Implementations
             }
             return updatedEmployee;
         }
+
+        public async Task DeleteEmployeeByIdAsync(Guid id)
+        {
+            var deletedEmployee = await _databaseContext.Employees.Where(employee => employee.Id == id).SingleOrDefaultAsync();
+            if (deletedEmployee != null)
+            {
+                _databaseContext.Employees.Remove(deletedEmployee);
+                await _databaseContext.SaveChangesAsync();
+            }
+        }
     }
 }

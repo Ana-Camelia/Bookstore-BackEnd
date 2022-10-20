@@ -10,5 +10,6 @@ namespace Bookstore.Application.Services
         Task<EmployeeResponseModel> CreateEmployeeAsync(EmployeeRequestModel employee);
         Task<EmployeeResponseModel> UpdateEmployeePhoneAsync(Guid id, string phone);
         Task<EmployeeResponseModel> UpdateEmployeeIsActiveAsync(Guid id, bool isActive);
+        Task DeleteEmployeeByIdAsync(Guid id);
     }
 }

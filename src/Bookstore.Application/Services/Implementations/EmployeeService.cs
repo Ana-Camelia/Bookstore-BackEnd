@@ -53,5 +53,10 @@ namespace Bookstore.Application.Services.Implementations
             var employee = await _employeeRepository.UpdateEmployeeIsActiveAsync(id, isActive);
             return _mapper.Map<EmployeeResponseModel>(employee);
         }
+
+        public async Task DeleteEmployeeByIdAsync(Guid id)
+        {
+            await _employeeRepository.DeleteEmployeeByIdAsync(id);
+        }
     }
 }

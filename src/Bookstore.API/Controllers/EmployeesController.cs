@@ -51,5 +51,12 @@ namespace Bookstore.API.Controllers
             var response = await _employeeService.UpdateEmployeeIsActiveAsync(id, isActive);
             return Ok(response);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEmployeeByIdAsync(Guid id)
+        {
+            await _employeeService.DeleteEmployeeByIdAsync(id);
+            return Ok("Action completed successfully");
+        }
     }
 }

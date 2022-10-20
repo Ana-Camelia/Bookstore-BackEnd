@@ -14,5 +14,6 @@ namespace Bookstore.DataAccess.Repositories
         Task<Employee> CreateEmployeeAsync(Employee employee);
         Task<Employee> UpdateEmployeePhoneAsync(Guid id, string phone);
         Task<Employee> UpdateEmployeeIsActiveAsync(Guid id, bool isActive);
+        Task DeleteEmployeeByIdAsync(Guid id);
     }
 }
