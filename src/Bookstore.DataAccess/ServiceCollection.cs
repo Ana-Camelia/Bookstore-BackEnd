@@ -18,6 +18,7 @@ namespace Bookstore.DataAccess
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IDistributorRepository, DistributorRepository>();
 
             return services;
         }

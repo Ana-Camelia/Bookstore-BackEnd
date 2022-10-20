@@ -13,6 +13,7 @@ namespace Bookstore.Application
             services.AddAutoMapper(typeof(EmployeeProfile));
 
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IDistributorService, DistributorService>();
 
             return services;
         }

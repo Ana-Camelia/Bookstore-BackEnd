@@ -9,6 +9,7 @@ namespace Bookstore.DataAccess.Persistence
         public DatabaseContext(DbContextOptions options) : base(options) { }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Distributor> Distributors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
