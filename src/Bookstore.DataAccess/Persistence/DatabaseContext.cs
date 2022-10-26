@@ -6,6 +6,7 @@ namespace Bookstore.DataAccess.Persistence
 {
     public class DatabaseContext : DbContext
     {
+        public DatabaseContext() : base() { }
         public DatabaseContext(DbContextOptions options) : base(options) { }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Role> Roles { get; set; }

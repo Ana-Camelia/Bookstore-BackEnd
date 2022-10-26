@@ -1,8 +1,7 @@
 ﻿using Bookstore.DataAccess.Entities;
+using Bookstore.DataAccess.Exceptions;
 using Bookstore.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
-using NSubstitute.Extensions;
-using System.Numerics;
 
 namespace Bookstore.DataAccess.Repositories.Implementations
 {
@@ -22,48 +21,45 @@ namespace Bookstore.DataAccess.Repositories.Implementations
 
         public async Task<Employee> GetEmployeeByIdAsync(Guid id)
         {
-            return await _databaseContext.Employees.Where(employee => employee.Id == id).SingleOrDefaultAsync();
+            return await _databaseContext.Employees.Where(emp => emp.Id == id).SingleOrDefaultAsync();
         }
 
         public async Task<Employee> CreateEmployeeAsync(Employee employee)
         {
-            var newEmployee = (await _databaseContext.Employees.AddAsync(employee)).Entity;
+            var employeeToAdd = (await _databaseContext.Employees.AddAsync(employee)).Entity;
 
             await _databaseContext.SaveChangesAsync();
 
-            return newEmployee;
+            return employeeToAdd;
         }
 
-        public async Task<Employee> UpdateEmployeePhoneAsync(Guid id, string phone)
+        public async Task<Employee> UpdateEmployeePhoneAsync(Employee employeeToUpdate, string phone)
         {
-            var updatedEmployee = await _databaseContext.Employees.Where(employee => employee.Id == id).SingleOrDefaultAsync();
-
-            if(updatedEmployee != null)
+            if (employeeToUpdate != null)
             {
-                updatedEmployee.Phone = phone;
+                employeeToUpdate.Phone = phone;
                 await _databaseContext.SaveChangesAsync();
             }
-            return updatedEmployee;
+
+            return employeeToUpdate;
         }
 
-        public async Task<Employee> UpdateEmployeeIsActiveAsync(Guid id, bool isActive)
+        public async Task<Employee> UpdateEmployeeIsActiveAsync(Employee employeeToUpdate, bool isActive)
         {
-            var updatedEmployee = await _databaseContext.Employees.Where(employee => employee.Id == id).SingleOrDefaultAsync();
-
-            if (updatedEmployee != null)
+            if (employeeToUpdate != null)
             {
-                updatedEmployee.IsActive = isActive;
+                employeeToUpdate.IsActive = isActive;
                 await _databaseContext.SaveChangesAsync();
             }
-            return updatedEmployee;
+
+            return employeeToUpdate;
         }
 
-        public async Task DeleteEmployeeByIdAsync(Guid id)
+        public async Task DeleteEmployeeByIdAsync(Employee employeeToDelete)
         {
-            var deletedEmployee = await _databaseContext.Employees.Where(employee => employee.Id == id).SingleOrDefaultAsync();
-            if (deletedEmployee != null)
+            if (employeeToDelete != null)
             {
-                _databaseContext.Employees.Remove(deletedEmployee);
+                _databaseContext.Employees.Remove(employeeToDelete);
                 await _databaseContext.SaveChangesAsync();
             }
         }

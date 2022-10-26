@@ -1,4 +1,5 @@
 ﻿using Bookstore.DataAccess.Entities;
+using Bookstore.DataAccess.Exceptions;
 using Bookstore.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,10 @@ namespace Bookstore.DataAccess.Repositories.Implementations
 
         public async Task<Role> GetRoleByNameAsync(string name)
         {
-            return await _databaseContext.Roles.Where(role => role.Name == name).SingleOrDefaultAsync();
+            var result = await _databaseContext.Roles.Where(role => role.Name == name).SingleOrDefaultAsync();
+            if (result == null)
+                throw new RoleNotFoundException("This role does not exist.");
+            return result;
         }
     }
 }

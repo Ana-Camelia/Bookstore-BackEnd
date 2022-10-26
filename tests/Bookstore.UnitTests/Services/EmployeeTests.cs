@@ -4,9 +4,11 @@ using Bookstore.Application.Models.Employee;
 using Bookstore.Application.Services;
 using Bookstore.Application.Services.Implementations;
 using Bookstore.DataAccess.Entities;
+using Bookstore.DataAccess.Exceptions;
 using Bookstore.DataAccess.Repositories;
 using FluentAssertions;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using System;
 using System.Net;
@@ -90,7 +92,7 @@ namespace Bookstore.UnitTests.Services
         [Fact]
         public async Task CreateEmployeeAsync_Should_Return_New_Employee()
         {
-            Guid guid = new Guid("c5e56b7d-d3e9-4097-b933-5c7e4eb858fb");
+            Guid guid = new Guid();
             var role = new Role
             {
                 Id = Guid.Parse("c5e45b7d-d3e9-4097-b933-5c7e4eb858fb"),
@@ -111,11 +113,13 @@ namespace Bookstore.UnitTests.Services
             emp.Role = role;
 
             _roleRepository.GetRoleByNameAsync("Admin").Returns(role);
+            _employeeRepository.GetEmployeeByIdAsync(emp.Id).ReturnsNull();
             _employeeRepository.CreateEmployeeAsync(Arg.Any<Employee>()).Returns(emp);
 
             var result = await _service.CreateEmployeeAsync(empReq);
 
             await _roleRepository.Received(1).GetRoleByNameAsync("Admin");
+            await _employeeRepository.Received(1).GetEmployeeByIdAsync(emp.Id);
             await _employeeRepository.Received(1).CreateEmployeeAsync(Arg.Any<Employee>());
 
             result.Should().BeOfType<EmployeeResponseModel>();
@@ -129,11 +133,18 @@ namespace Bookstore.UnitTests.Services
             Guid guid = Guid.Parse("0fa2686a-6bb6-40a7-8d8b-13086fef27c6");
             string phone = "1111111111";
 
-            _employeeRepository.UpdateEmployeePhoneAsync(guid, phone).Returns(new Employee { Id = guid, Phone = phone });
+            var emp = new Employee
+            {
+                Id = guid,
+                Phone = "4353454453"
+            };
+
+            _employeeRepository.GetEmployeeByIdAsync(guid).Returns(emp);
+            _employeeRepository.UpdateEmployeePhoneAsync(emp, phone).Returns(new Employee { Id = guid, Phone = phone });
 
             var result = await _service.UpdateEmployeePhoneAsync(guid, phone);
 
-            await _employeeRepository.Received(1).UpdateEmployeePhoneAsync(guid, phone);
+            await _employeeRepository.Received(1).UpdateEmployeePhoneAsync(emp, phone);
 
             result.Phone.Should().Be(phone);
         }
@@ -144,11 +155,18 @@ namespace Bookstore.UnitTests.Services
             Guid guid = Guid.Parse("0fa2686a-6bb6-40a7-8d8b-13086fef27c6");
             bool isActive = false;
 
-            _employeeRepository.UpdateEmployeeIsActiveAsync(guid, isActive).Returns(new Employee { Id = guid, IsActive = isActive });
+            var emp = new Employee
+            {
+                Id = guid,
+                Phone = "4353454453"
+            };
+
+            _employeeRepository.GetEmployeeByIdAsync(guid).Returns(emp);
+            _employeeRepository.UpdateEmployeeIsActiveAsync(emp, isActive).Returns(new Employee { Id = guid, IsActive = isActive });
 
             var result = await _service.UpdateEmployeeIsActiveAsync(guid, isActive);
 
-            await _employeeRepository.Received(1).UpdateEmployeeIsActiveAsync(guid, isActive);
+            await _employeeRepository.Received(1).UpdateEmployeeIsActiveAsync(emp, isActive);
 
             result.IsActive.Should().Be(false);
         }

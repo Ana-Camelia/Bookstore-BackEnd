@@ -21,6 +21,7 @@ namespace Bookstore.DataAccess.Repositories.Implementations
 
         public async Task<Distributor> GetDistributorByIdAsync(Guid id)
         {
+
             return await _databaseContext.Distributors.Where(distributor => distributor.Id == id).SingleOrDefaultAsync();
         }
 
