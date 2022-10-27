@@ -1,6 +1,9 @@
 using Bookstore.Application;
+using Bookstore.Application.Validators;
 using Bookstore.DataAccess;
 using Bookstore.DataAccess.Persistence;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+
+builder.Services.AddValidatorsFromAssemblyContaining<EmployeeRequestModelValidator>();
+
+builder.Services.AddFluentValidationAutoValidation();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
