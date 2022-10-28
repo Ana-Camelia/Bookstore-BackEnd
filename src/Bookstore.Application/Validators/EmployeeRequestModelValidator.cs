@@ -22,7 +22,7 @@ namespace Bookstore.Application.Validators
         {
             RuleFor(emp => emp.FirstName).NotNull().WithMessage("First name is null");
             RuleFor(emp => emp.FirstName).NotEmpty().WithMessage("First name is empty");
-            RuleFor(emp => emp.FirstName).Length(1, 30).WithMessage("First Name must have a length between 1 and 30 characters.");
+            RuleFor(emp => emp.FirstName).Length(1, 30).WithMessage("First name must have a length between 1 and 30 characters.");
             RuleFor(emp => emp.FirstName).Must(ContainLettersOnly).WithMessage("First name must contain letters only.");
         }
 
@@ -30,7 +30,7 @@ namespace Bookstore.Application.Validators
         {
             RuleFor(emp => emp.LastName).NotNull().WithMessage("Last name is null");
             RuleFor(emp => emp.LastName).NotEmpty().WithMessage("Last name is empty");
-            RuleFor(emp => emp.LastName).Length(1, 30).WithMessage("Last Name must have a length between 1 and 30 characters.");
+            RuleFor(emp => emp.LastName).Length(1, 30).WithMessage("Last name must have a length between 1 and 30 characters.");
             RuleFor(emp => emp.LastName).Must(ContainLettersOnly).WithMessage("Last name must contain letters only.");
         }
 
