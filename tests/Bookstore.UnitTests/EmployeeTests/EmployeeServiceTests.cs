@@ -1,29 +1,25 @@
 ﻿using AutoMapper;
+using Bookstore.Application.Exceptions;
 using Bookstore.Application.Mapping;
 using Bookstore.Application.Models.Employee;
 using Bookstore.Application.Services;
 using Bookstore.Application.Services.Implementations;
 using Bookstore.DataAccess.Entities;
-using Bookstore.DataAccess.Exceptions;
 using Bookstore.DataAccess.Repositories;
 using FluentAssertions;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
-using System;
-using System.Net;
-using System.Xml.Linq;
 
-namespace Bookstore.UnitTests.Services
+namespace Bookstore.UnitTests.EmployeeTests
 {
-    public class EmployeeTests
+    public class EmployeeServiceTests
     {
         private readonly IEmployeeService _service;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
 
-        public EmployeeTests()
+        public EmployeeServiceTests()
         {
             _employeeRepository = Substitute.For<IEmployeeRepository>();
             _roleRepository = Substitute.For<IRoleRepository>();
@@ -90,6 +86,21 @@ namespace Bookstore.UnitTests.Services
         }
 
         [Fact]
+        public async Task GetEmployeeByCnpAsync_Should_Return_A_Valid_Employee()
+        {
+            //Arrange
+            var cnp = "2400331054409";
+            _employeeRepository.GetEmployeeByCnpAsync(cnp)
+                .Returns(new Employee());
+            //Act
+            var result = await _service.GetEmployeeByCnpAsync(cnp);
+            await _employeeRepository.Received(1).GetEmployeeByCnpAsync(cnp);
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<EmployeeResponseModel>();
+        }
+
+        [Fact]
         public async Task CreateEmployeeAsync_Should_Return_New_Employee()
         {
             Guid guid = new Guid();
@@ -125,6 +136,26 @@ namespace Bookstore.UnitTests.Services
             result.Should().BeOfType<EmployeeResponseModel>();
             result.FirstName.Should().Be("Pacocha");
             result.Role.Should().Be("Admin");
+        }
+
+        [Fact]
+        public async Task CreateEmployeeAsync_Should_Throw_CnpAlreadyExistsException()
+        {
+            var role = new Role
+            {
+                Id = Guid.Parse("c5e45b7d-d3e9-4097-b933-5c7e4eb858fb"),
+                Name = "Admin"
+            };
+
+            _roleRepository.GetRoleByNameAsync(Arg.Any<string>()).Returns(role);
+            _employeeRepository.GetEmployeeByIdAsync(Arg.Any<Guid>()).ReturnsNull();
+            _employeeRepository.GetEmployeeByCnpAsync(Arg.Any<string>()).Returns(new Employee());
+            //_employeeRepository.CreateEmployeeAsync(Arg.Any<Employee>()).Returns(emp);
+
+            Func<Task<EmployeeResponseModel>> func = async () => await _service.CreateEmployeeAsync(new EmployeeRequestModel());
+
+            func.Should().ThrowAsync<CnpAlreadyExistsException>()
+                .WithMessage("An employee with this CNP already exists.");
         }
 
         [Fact]

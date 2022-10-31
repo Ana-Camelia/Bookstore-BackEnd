@@ -63,7 +63,7 @@ namespace Bookstore.Application.Validators
             RuleFor(emp => emp.Password).NotNull().WithMessage("Password is null");
             RuleFor(emp => emp.Password).NotEmpty().WithMessage("Password is empty");
             RuleFor(emp => emp.Password).Length(8, 30).WithMessage("Password must have a length between 8 and 30 characters.");
-            RuleFor(emp => emp.Phone).Must(ContainNumbersAndLetters).WithMessage("Phone must contain at least 1 letter and at least 1 number.");
+            RuleFor(emp => emp.Password).Must(ContainNumbersAndLetters).WithMessage("Password must contain at least 1 letter and at least 1 number.");
         }
 
         private void RulesForIsActive()
