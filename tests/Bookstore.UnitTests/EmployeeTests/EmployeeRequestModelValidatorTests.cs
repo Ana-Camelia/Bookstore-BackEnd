@@ -196,13 +196,13 @@ namespace Bookstore.UnitTests.EmployeeTests
                 CNP = "",
                 Role = "",
                 Phone = "",
-                Password = "pass"
+                Password = ""
             };
 
             var result = _requestModelValidator.TestValidate(employee);
 
             result.ShouldHaveValidationErrorFor(emp => emp.IsActive)
-                .WithErrorMessage("IsActive is empty");
+                .WithErrorMessage("IsActive is empty.");
         }
     }
 }

@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Bookstore.API\Bookstore.API.csproj" />
     <ProjectReference Include="..\..\src\Bookstore.Application\Bookstore.Application.csproj" />
   </ItemGroup>
 

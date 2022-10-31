@@ -150,11 +150,10 @@ namespace Bookstore.UnitTests.EmployeeTests
             _roleRepository.GetRoleByNameAsync(Arg.Any<string>()).Returns(role);
             _employeeRepository.GetEmployeeByIdAsync(Arg.Any<Guid>()).ReturnsNull();
             _employeeRepository.GetEmployeeByCnpAsync(Arg.Any<string>()).Returns(new Employee());
-            //_employeeRepository.CreateEmployeeAsync(Arg.Any<Employee>()).Returns(emp);
 
             Func<Task<EmployeeResponseModel>> func = async () => await _service.CreateEmployeeAsync(new EmployeeRequestModel());
 
-            func.Should().ThrowAsync<CnpAlreadyExistsException>()
+            await func.Should().ThrowAsync<CnpAlreadyExistsException>()
                 .WithMessage("An employee with this CNP already exists.");
         }
 
