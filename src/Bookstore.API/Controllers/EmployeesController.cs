@@ -32,6 +32,13 @@ namespace Bookstore.API.Controllers
             return Ok(ApiResponse<EmployeeResponseModel>.Success(response));
         }
 
+        [HttpGet("search/{cnp}")]
+        public async Task<IActionResult> GetEmployeeByCnpAsync(string cnp)
+        {
+            var response = await _employeeService.GetEmployeeByCnpAsync(cnp);
+            return Ok(ApiResponse<EmployeeResponseModel>.Success(response));
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateEmployeeAsync(EmployeeRequestModel employee)
         {

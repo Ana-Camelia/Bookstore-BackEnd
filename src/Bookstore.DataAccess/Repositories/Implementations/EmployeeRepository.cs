@@ -23,6 +23,10 @@ namespace Bookstore.DataAccess.Repositories.Implementations
         {
             return await _databaseContext.Employees.Where(emp => emp.Id == id).SingleOrDefaultAsync();
         }
+        public async Task<Employee> GetEmployeeByCnpAsync(string cnp)
+        {
+            return await _databaseContext.Employees.Where(emp => emp.CNP == cnp).SingleOrDefaultAsync();
+        }
 
         public async Task<Employee> CreateEmployeeAsync(Employee employee)
         {

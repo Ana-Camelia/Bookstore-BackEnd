@@ -7,6 +7,7 @@ namespace Bookstore.Application.Services
     {
         Task<List<EmployeeResponseModel>> GetEmployeesAsync();
         Task<EmployeeResponseModel> GetEmployeeByIdAsync(Guid id);
+        Task<EmployeeResponseModel> GetEmployeeByCnpAsync(string cnp);
         Task<EmployeeResponseModel> CreateEmployeeAsync(EmployeeRequestModel employee);
         Task<EmployeeResponseModel> UpdateEmployeePhoneAsync(Guid id, string phone);
         Task<EmployeeResponseModel> UpdateEmployeeIsActiveAsync(Guid id, bool isActive);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bookstore.Application.Exceptions;
 using Bookstore.Application.Models.Employee;
 using Bookstore.DataAccess.Entities;
 using Bookstore.DataAccess.Exceptions;
@@ -32,6 +33,12 @@ namespace Bookstore.Application.Services.Implementations
             return _mapper.Map<EmployeeResponseModel>(employee);
         }
 
+        public async Task<EmployeeResponseModel> GetEmployeeByCnpAsync(string cnp)
+        {
+            var employee = await _employeeRepository.GetEmployeeByCnpAsync(cnp);
+            return _mapper.Map<EmployeeResponseModel>(employee);
+        }
+
         public async Task<EmployeeResponseModel> CreateEmployeeAsync(EmployeeRequestModel employee)
         {
             var newEmployee = _mapper.Map<Employee>(employee);
@@ -41,6 +48,10 @@ namespace Bookstore.Application.Services.Implementations
             var searchResult = await _employeeRepository.GetEmployeeByIdAsync(newEmployee.Id);
             if(searchResult != null)
                 throw new EmployeeAlreadyExistsException("An employee with this ID already exists.");
+
+            searchResult = await _employeeRepository.GetEmployeeByCnpAsync(newEmployee.CNP);
+            if (searchResult != null)
+                throw new CnpAlreadyExistsException("An employee with this CNP already exists.");
 
             var employeeResponse = await _employeeRepository.CreateEmployeeAsync(newEmployee);
 
